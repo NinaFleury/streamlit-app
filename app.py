@@ -77,5 +77,4 @@ def csv_to_ofx(input_csv, output_ofx):
 
     print(f"Conversion terminée : {output_ofx} créé avec succès.")
 
-# Exemple d'utilisation
-csv_to_ofx('documentinitial.csv', 'output.ofx')
+
