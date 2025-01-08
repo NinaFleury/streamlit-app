@@ -67,14 +67,15 @@ uploaded_file = st.file_uploader("Téléversez un fichier CSV (colonnes : Date, 
 if uploaded_file:
     # Charger les données avec gestion des erreurs d'encodage
     try:
-        df = pd.read_csv(uploaded_file, encoding='utf-8', errors='replace')
+        df = pd.read_csv(uploaded_file, encoding='utf-8')
     except UnicodeDecodeError:
-        st.error("Erreur lors du chargement du fichier. Veuillez vérifier l'encodage.")
-    else:
-        output_file = "output.ofx"
-        transactions_to_ofx(df, output_file)
+        st.warning("Erreur d'encodage détectée. Tentative avec l'encodage 'latin1'...")
+        df = pd.read_csv(uploaded_file, encoding='latin1')
 
-        # Proposer le téléchargement
-        st.success("Conversion terminée ! Téléchargez votre fichier :")
-        with open(output_file, "rb") as f:
-            st.download_button("Télécharger le fichier OFX", f, file_name="output.ofx")
+    output_file = "output.ofx"
+    transactions_to_ofx(df, output_file)
+
+    # Proposer le téléchargement
+    st.success("Conversion terminée ! Téléchargez votre fichier :")
+    with open(output_file, "rb") as f:
+        st.download_button("Télécharger le fichier OFX", f, file_name="output.ofx")
